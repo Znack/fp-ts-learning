@@ -1,8 +1,7 @@
-import { main, Program, Console, Random } from '../src/fp-ts-learning'
-import { Task } from 'fp-ts/lib/Task'
 import { State } from 'fp-ts/lib/State'
-
 import { drop, snoc } from 'fp-ts/lib/Array'
+
+import { main, Program, Console, Random } from '../src/guess-a-number'
 
 class TestData {
   constructor(
@@ -101,6 +100,23 @@ describe('Random number game', () => {
           'Dear Giulio, please guess a number from 1 to 5',
           'You guessed right, Giulio!',
           'Do you want to continue, Giulio?',
+          'Do you want to continue, Giulio?'
+        ]
+      )
+    ])
+  })
+  it('asks again if not valid number', () => {
+    const testExample = new TestData(['Giulio', 'O', 'n'], [1], [])
+    expect(mainTestTask.run(testExample)).toEqual([
+      undefined,
+      new TestData(
+        [],
+        [],
+        [
+          'What is your name?',
+          'Hello, Giulio welcome to the game!',
+          'Dear Giulio, please guess a number from 1 to 5',
+          'You did not enter an integer!',
           'Do you want to continue, Giulio?'
         ]
       )
