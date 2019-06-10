@@ -72,10 +72,9 @@ class TestData {
     ]
   }
 }
-const of = <A>(a: A): TestTask<A> => new TestTask(data => [a, data])
 
 const programTestTask: Program<TestTaskURI> = {
-  finish: of
+  of: <A>(a: A): TestTask<A> => new TestTask(data => [a, data])
 }
 
 const consoleTestTask: Console<TestTaskURI> = {

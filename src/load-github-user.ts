@@ -32,7 +32,7 @@ interface ProgramSyntax<F extends URIS, A> {
 type _<F extends URIS, A> = Type<F, A> & ProgramSyntax<F, A>
 
 export interface Program<F extends URIS> {
-  finish: <A>(a: A) => _<F, A>
+  of: <A>(a: A) => _<F, A>
 }
 export interface HttpLoader<F extends URIS> {
   httpLoad: (requestUrl: string) => _<F, IServerMultipleResponse<IServerUser>>
@@ -49,7 +49,7 @@ const githubUrl = (q: string) => `https://api.github.com/search/users?q=${q}`
 export const main = <F extends URIS>(F: Main<F>): _<F, Option<number>> =>
   F.putStrLn('Who are you?')
     .chain(() => F.getStrLn)
-    .chain(name => F.putStrLn('Loading your Github profile...').chain(() => F.finish(name)))
+    .chain(name => F.putStrLn('Loading your Github profile...').chain(() => F.of(name)))
     .chain(
       compose(
         F.httpLoad,
@@ -57,9 +57,8 @@ export const main = <F extends URIS>(F: Main<F>): _<F, Option<number>> =>
       )
     )
     .chain(({ items }) =>
-      head(items).fold(
-        F.putStrLn(`No such profile found!`).chain(() => F.finish(none)),
-        ({ score }) => F.putStrLn(`Your score is ${score}`).chain(() => F.finish(some(score)))
+      head(items).fold(F.putStrLn(`No such profile found!`).chain(() => F.of(none)), ({ score }) =>
+        F.putStrLn(`Your score is ${score}`).chain(() => F.of(some(score)))
       )
     )
-    .chain(F.finish)
+    .chain(F.of)
